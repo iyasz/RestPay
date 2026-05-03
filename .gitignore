@@ -1,14 +1,8 @@
-# Maven build output - JANGAN di-push
 target/
 
-# File NetBeans
 nbactions.xml
 nb-configuration.xml
 .nb-gradle/
 
-# Database (opsional, hapus baris ini kalau mau tetap push .db)
-# restpay.db
-
-# OS files
 .DS_Store
 Thumbs.db
