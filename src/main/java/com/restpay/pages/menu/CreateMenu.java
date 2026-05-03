@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
-package com.restpay.pages;
+package com.restpay.pages.menu;
 
 import com.restpay.Navigable;
 
@@ -10,18 +10,18 @@ import com.restpay.Navigable;
  *
  * @author iyasz
  */
-public class Dashboard extends javax.swing.JPanel {
+public class CreateMenu extends javax.swing.JPanel {
     
     private Navigable navigator;
 
     /**
-     * Creates new form Dashboard
+     * Creates new form CreateMenu
      */
-    public Dashboard() {
+    public CreateMenu() {
         initComponents();
     }
     
-    public Dashboard(Navigable navigator) {
+    public CreateMenu(Navigable navigator) {
         initComponents();
         this.navigator = navigator;
     }
@@ -39,15 +39,17 @@ public class Dashboard extends javax.swing.JPanel {
         jLabel2 = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(255, 255, 255));
+        setMinimumSize(new java.awt.Dimension(1020, 480));
+        setPreferredSize(new java.awt.Dimension(1020, 480));
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
-        jLabel1.setText("Dashboard");
+        jLabel1.setText("Tambah Menu");
         add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 50, -1, -1));
 
         jLabel2.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(98, 98, 98));
-        jLabel2.setText("Ikhtisar performa dan statistik transaksi");
+        jLabel2.setText("Form untuk pengelolaan menu sistem");
         add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 90, -1, -1));
     }// </editor-fold>//GEN-END:initComponents
 

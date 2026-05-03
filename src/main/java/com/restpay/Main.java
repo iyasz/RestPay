@@ -4,11 +4,23 @@
  */
 package com.restpay;
 
+import com.restpay.database.DatabaseInitializer;
+import com.restpay.pages.Cashier;
+import com.restpay.pages.Dashboard;
+import com.restpay.pages.menu.CreateMenu;
+import com.restpay.pages.menu.Menu;
+import java.awt.CardLayout;
+import java.awt.Color;
+import javax.swing.JFrame;
+
 /**
  *
  * @author iyasz
  */
-public class Main extends javax.swing.JFrame {
+public class Main extends javax.swing.JFrame implements Navigable {
+    
+    private javax.swing.JButton activeButton = null;
+    private CardLayout cardLayout;
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Main.class.getName());
 
@@ -17,6 +29,33 @@ public class Main extends javax.swing.JFrame {
      */
     public Main() {
         initComponents();
+        setExtendedState(JFrame.MAXIMIZED_BOTH);        
+        
+        cardLayout = new CardLayout();
+        ControlPanel.setLayout(cardLayout);
+        
+        ControlPanel.add(new Dashboard(this), "DASHBOARD");
+        ControlPanel.add(new Cashier(this),   "CASHIER");
+        
+        ControlPanel.add(new Menu(this),      "MENU");
+        ControlPanel.add(new CreateMenu(this),   "CREATE_MENU");
+        
+        cardLayout.show(ControlPanel, "DASHBOARD");
+        setActiveButton(to_dashboard);
+    }
+    
+    @Override
+    public void navigateTo(String pageName) {
+        cardLayout.show(ControlPanel, pageName);
+    }
+    
+    private void setActiveButton(javax.swing.JButton btn) {
+        if (activeButton != null) {
+            activeButton.setBackground(new Color(16, 82, 223));
+        }
+
+        activeButton = btn;
+        activeButton.setBackground(new Color(52, 107, 230));
     }
 
     /**
@@ -28,47 +67,210 @@ public class Main extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPanel1 = new javax.swing.JPanel();
+        to_cashier = new javax.swing.JButton();
+        to_menu = new javax.swing.JButton();
+        to_dashboard = new javax.swing.JButton();
+        jSeparator1 = new javax.swing.JSeparator();
+        logo1 = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+        ControlPanel = new javax.swing.JPanel();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setName("MainFrame"); // NOI18N
+
+        jPanel1.setBackground(new java.awt.Color(16, 82, 223));
+
+        to_cashier.setBackground(new java.awt.Color(16, 82, 223));
+        to_cashier.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        to_cashier.setForeground(new java.awt.Color(255, 255, 255));
+        to_cashier.setText("Kasir");
+        to_cashier.setBorder(null);
+        to_cashier.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        to_cashier.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                to_cashierMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                to_cashierMouseExited(evt);
+            }
+        });
+        to_cashier.addActionListener(this::to_cashierActionPerformed);
+
+        to_menu.setBackground(new java.awt.Color(16, 82, 223));
+        to_menu.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        to_menu.setForeground(new java.awt.Color(255, 255, 255));
+        to_menu.setText("Menu");
+        to_menu.setBorder(null);
+        to_menu.setBorderPainted(false);
+        to_menu.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        to_menu.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                to_menuMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                to_menuMouseExited(evt);
+            }
+        });
+        to_menu.addActionListener(this::to_menuActionPerformed);
+
+        to_dashboard.setBackground(new java.awt.Color(16, 82, 223));
+        to_dashboard.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        to_dashboard.setForeground(new java.awt.Color(255, 255, 255));
+        to_dashboard.setText("Dashboard");
+        to_dashboard.setBorder(null);
+        to_dashboard.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        to_dashboard.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                to_dashboardMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                to_dashboardMouseExited(evt);
+            }
+        });
+        to_dashboard.addActionListener(this::to_dashboardActionPerformed);
+
+        jSeparator1.setBackground(new java.awt.Color(102, 153, 255));
+        jSeparator1.setForeground(new java.awt.Color(153, 153, 255));
+        jSeparator1.setPreferredSize(new java.awt.Dimension(50, 5));
+
+        logo1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        logo1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/restpay/images/restpay-logo.png"))); // NOI18N
+
+        jLabel1.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(242, 242, 242));
+        jLabel1.setText("Main");
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(46, 46, 46)
+                        .addComponent(logo1))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(26, 26, 26)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(to_cashier, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(to_menu, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(to_dashboard, javax.swing.GroupLayout.PREFERRED_SIZE, 224, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jLabel1)
+                            .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 233, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(34, 34, 34)
+                .addComponent(logo1)
+                .addGap(32, 32, 32)
+                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(46, 46, 46)
+                .addComponent(jLabel1)
+                .addGap(18, 18, 18)
+                .addComponent(to_dashboard, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(to_cashier, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(to_menu, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(238, Short.MAX_VALUE))
+        );
+
+        ControlPanel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 684, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(ControlPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 1152, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(55, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 460, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(14, 14, 14)
+                .addComponent(ControlPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void to_cashierActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_to_cashierActionPerformed
+        navigateTo("CASHIER");
+        setActiveButton(to_cashier);
+    }//GEN-LAST:event_to_cashierActionPerformed
+
+    private void to_menuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_to_menuActionPerformed
+        navigateTo("MENU");
+        setActiveButton(to_menu);
+    }//GEN-LAST:event_to_menuActionPerformed
+
+    private void to_dashboardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_to_dashboardActionPerformed
+        navigateTo("DASHBOARD");
+        setActiveButton(to_dashboard);
+    }//GEN-LAST:event_to_dashboardActionPerformed
+
+    private void to_dashboardMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_to_dashboardMouseEntered
+        to_dashboard.setBackground(new Color(52, 107, 230));
+    }//GEN-LAST:event_to_dashboardMouseEntered
+
+    private void to_dashboardMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_to_dashboardMouseExited
+        if (to_dashboard != activeButton) {
+            to_dashboard.setBackground(new Color(16, 82, 223));
+        }
+    }//GEN-LAST:event_to_dashboardMouseExited
+
+    private void to_cashierMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_to_cashierMouseExited
+        if (to_cashier != activeButton) {
+            to_cashier.setBackground(new Color(16, 82, 223));
+        }
+    }//GEN-LAST:event_to_cashierMouseExited
+
+    private void to_cashierMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_to_cashierMouseEntered
+        to_cashier.setBackground(new Color(52, 107, 230));
+    }//GEN-LAST:event_to_cashierMouseEntered
+
+    private void to_menuMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_to_menuMouseEntered
+        to_menu.setBackground(new Color(52, 107, 230));
+    }//GEN-LAST:event_to_menuMouseEntered
+
+    private void to_menuMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_to_menuMouseExited
+        if (to_menu != activeButton) {
+            to_menu.setBackground(new Color(16, 82, 223));
+        }
+    }//GEN-LAST:event_to_menuMouseExited
+
+    
+    
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
-            logger.log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new Main().setVisible(true));
+    public static void main(String[] args) {
+        
+        DatabaseInitializer.initialize();
+        
+        java.awt.EventQueue.invokeLater(() -> {
+            new Main().setVisible(true);
+        });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel ControlPanel;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JLabel logo1;
+    private javax.swing.JButton to_cashier;
+    private javax.swing.JButton to_dashboard;
+    private javax.swing.JButton to_menu;
     // End of variables declaration//GEN-END:variables
 }
