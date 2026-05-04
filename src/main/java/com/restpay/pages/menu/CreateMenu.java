@@ -39,7 +39,7 @@ public class CreateMenu extends javax.swing.JPanel {
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         filed_menu_name = new javax.swing.JTextField();
-        to_menu = new javax.swing.JButton();
+        submit_form_menu = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
         filed_menu_category = new javax.swing.JComboBox<>();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -52,6 +52,7 @@ public class CreateMenu extends javax.swing.JPanel {
         jLabel8 = new javax.swing.JLabel();
         btn_upload_image = new javax.swing.JButton();
         jLabel9 = new javax.swing.JLabel();
+        to_menu = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(255, 255, 255));
         setMinimumSize(new java.awt.Dimension(1020, 480));
@@ -72,12 +73,13 @@ public class CreateMenu extends javax.swing.JPanel {
         add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 180, -1, -1));
         add(filed_menu_name, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 200, 310, 40));
 
-        to_menu.setBackground(new java.awt.Color(102, 102, 255));
-        to_menu.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
-        to_menu.setForeground(new java.awt.Color(255, 255, 255));
-        to_menu.setText("Back");
-        to_menu.addActionListener(this::to_menuActionPerformed);
-        add(to_menu, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 50, 100, 40));
+        submit_form_menu.setBackground(new java.awt.Color(102, 102, 255));
+        submit_form_menu.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        submit_form_menu.setForeground(new java.awt.Color(255, 255, 255));
+        submit_form_menu.setText("Submit");
+        submit_form_menu.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        submit_form_menu.addActionListener(this::submit_form_menuActionPerformed);
+        add(submit_form_menu, new org.netbeans.lib.awtextra.AbsoluteConstraints(900, 110, 100, 40));
 
         jLabel4.setForeground(new java.awt.Color(33, 33, 33));
         jLabel4.setText("Ketersediaan");
@@ -91,7 +93,7 @@ public class CreateMenu extends javax.swing.JPanel {
         jTextArea1.setRows(5);
         jScrollPane1.setViewportView(jTextArea1);
 
-        add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 480, 310, 90));
+        add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 480, 410, 130));
 
         jLabel5.setForeground(new java.awt.Color(33, 33, 33));
         jLabel5.setText("Kategori");
@@ -122,15 +124,28 @@ public class CreateMenu extends javax.swing.JPanel {
         jLabel9.setForeground(new java.awt.Color(33, 33, 33));
         jLabel9.setText("Deskripsi");
         add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 460, -1, -1));
+
+        to_menu.setBackground(new java.awt.Color(254, 254, 254));
+        to_menu.setText("Kembali");
+        to_menu.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        to_menu.setPreferredSize(new java.awt.Dimension(72, 21));
+        to_menu.addActionListener(this::to_menuActionPerformed);
+        add(to_menu, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 110, 100, 40));
     }// </editor-fold>//GEN-END:initComponents
 
-    private void to_menuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_to_menuActionPerformed
+    private void submit_form_menuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submit_form_menuActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_to_menuActionPerformed
+    }//GEN-LAST:event_submit_form_menuActionPerformed
 
     private void filed_menu_availableActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_filed_menu_availableActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_filed_menu_availableActionPerformed
+
+    private void to_menuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_to_menuActionPerformed
+        if (navigator != null) {
+            navigator.navigateTo("MENU");
+        }
+    }//GEN-LAST:event_to_menuActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -150,6 +165,7 @@ public class CreateMenu extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextArea jTextArea1;
+    private javax.swing.JButton submit_form_menu;
     private javax.swing.JButton to_menu;
     // End of variables declaration//GEN-END:variables
 }
