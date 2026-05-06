@@ -5,6 +5,16 @@
 package com.restpay.pages.menu;
 
 import com.restpay.Navigable;
+import com.restpay.models.Category;
+import com.restpay.models.Product;
+import com.restpay.repositories.CategoryRepository;
+import com.restpay.repositories.ProductRepository;
+import java.awt.Image;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
 
 /**
  *
@@ -13,19 +23,50 @@ import com.restpay.Navigable;
 public class CreateMenu extends javax.swing.JPanel {
     
     private Navigable navigator;
-
+    private List<Category> categoryList = new ArrayList<>();
+    private String selectedImagePath = null;
+    
     /**
      * Creates new form CreateMenu
      */
     public CreateMenu() {
         initComponents();
+        loadCategories();
     }
     
     public CreateMenu(Navigable navigator) {
         initComponents();
+        loadCategories();
+        
         this.navigator = navigator;
     }
+    
+    private void loadCategories() {
+        field_menu_category.removeAllItems();
 
+        categoryList = CategoryRepository.getAll();
+
+        if (categoryList.isEmpty()) {
+            field_menu_category.addItem("-- Tidak ada kategori --");
+            field_menu_category.setEnabled(false);
+            return;
+        }
+        
+        field_menu_category.addItem("Select an Option");
+        for (Category category : categoryList) {
+            field_menu_category.addItem(category.getName()); // addItem pakai objek Category
+
+        }
+    }
+    
+    private void clearForm() {
+        filed_menu_name.setText("");
+        filed_menu_description.setText("");
+        filed_menu_price.setText("");
+        field_menu_category.setSelectedIndex(0);
+        filed_menu_available.setSelected(false);
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -37,20 +78,17 @@ public class CreateMenu extends javax.swing.JPanel {
 
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
         filed_menu_name = new javax.swing.JTextField();
         submit_form_menu = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
-        filed_menu_category = new javax.swing.JComboBox<>();
+        field_menu_category = new javax.swing.JComboBox<>();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        filed_menu_description = new javax.swing.JTextArea();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         filed_menu_price = new javax.swing.JTextField();
         filed_menu_available = new javax.swing.JCheckBox();
         jLabel7 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
-        btn_upload_image = new javax.swing.JButton();
         jLabel9 = new javax.swing.JLabel();
         to_menu = new javax.swing.JButton();
 
@@ -67,10 +105,6 @@ public class CreateMenu extends javax.swing.JPanel {
         jLabel2.setForeground(new java.awt.Color(98, 98, 98));
         jLabel2.setText("Form untuk pengelolaan menu sistem");
         add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 90, -1, -1));
-
-        jLabel3.setForeground(new java.awt.Color(33, 33, 33));
-        jLabel3.setText("Image");
-        add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 180, -1, -1));
         add(filed_menu_name, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 200, 310, 40));
 
         submit_form_menu.setBackground(new java.awt.Color(102, 102, 255));
@@ -79,21 +113,21 @@ public class CreateMenu extends javax.swing.JPanel {
         submit_form_menu.setText("Submit");
         submit_form_menu.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         submit_form_menu.addActionListener(this::submit_form_menuActionPerformed);
-        add(submit_form_menu, new org.netbeans.lib.awtextra.AbsoluteConstraints(900, 110, 100, 40));
+        add(submit_form_menu, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 540, 100, 40));
 
         jLabel4.setForeground(new java.awt.Color(33, 33, 33));
         jLabel4.setText("Ketersediaan");
-        add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 460, -1, -1));
+        add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 370, -1, -1));
 
-        filed_menu_category.setBackground(new java.awt.Color(254, 254, 254));
-        filed_menu_category.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        add(filed_menu_category, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 290, 310, 40));
+        field_menu_category.setBackground(new java.awt.Color(254, 254, 254));
+        field_menu_category.addActionListener(this::field_menu_categoryActionPerformed);
+        add(field_menu_category, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 290, 310, 40));
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane1.setViewportView(jTextArea1);
+        filed_menu_description.setColumns(20);
+        filed_menu_description.setRows(5);
+        jScrollPane1.setViewportView(filed_menu_description);
 
-        add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 480, 410, 130));
+        add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 200, 410, 130));
 
         jLabel5.setForeground(new java.awt.Color(33, 33, 33));
         jLabel5.setText("Kategori");
@@ -107,34 +141,85 @@ public class CreateMenu extends javax.swing.JPanel {
         filed_menu_available.setBackground(new java.awt.Color(255, 255, 255));
         filed_menu_available.setText("Tersedia");
         filed_menu_available.addActionListener(this::filed_menu_availableActionPerformed);
-        add(filed_menu_available, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 490, -1, -1));
+        add(filed_menu_available, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 400, -1, -1));
 
         jLabel7.setForeground(new java.awt.Color(33, 33, 33));
         jLabel7.setText("Harga");
         add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 370, -1, -1));
 
-        jLabel8.setForeground(new java.awt.Color(33, 33, 33));
-        jLabel8.setText("Preview");
-        add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 270, 180, 160));
-
-        btn_upload_image.setBackground(new java.awt.Color(254, 254, 254));
-        btn_upload_image.setText("Upload");
-        add(btn_upload_image, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 210, 100, 30));
-
         jLabel9.setForeground(new java.awt.Color(33, 33, 33));
         jLabel9.setText("Deskripsi");
-        add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 460, -1, -1));
+        add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 180, -1, -1));
 
         to_menu.setBackground(new java.awt.Color(254, 254, 254));
         to_menu.setText("Kembali");
         to_menu.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         to_menu.setPreferredSize(new java.awt.Dimension(72, 21));
         to_menu.addActionListener(this::to_menuActionPerformed);
-        add(to_menu, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 110, 100, 40));
+        add(to_menu, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 540, 100, 40));
     }// </editor-fold>//GEN-END:initComponents
 
     private void submit_form_menuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submit_form_menuActionPerformed
-        // TODO add your handling code here:
+        String name        = filed_menu_name.getText().trim();
+        String description = filed_menu_description.getText().trim();
+        String priceText   = filed_menu_price.getText().trim();
+        boolean isAvailable = filed_menu_available.isSelected();
+        
+        int selectedIndex = field_menu_category.getSelectedIndex();
+        
+        if (selectedIndex <= 0 || categoryList.isEmpty()) {
+            javax.swing.JOptionPane.showMessageDialog(this,
+                "Pilih kategori terlebih dahulu!",
+                "Validasi Gagal",
+                javax.swing.JOptionPane.WARNING_MESSAGE
+            );
+            return;
+        }
+
+        if (name.isEmpty() || priceText.isEmpty()) {
+            javax.swing.JOptionPane.showMessageDialog(this,
+                "Nama dan harga wajib diisi!",
+                "Validasi Gagal",
+                javax.swing.JOptionPane.WARNING_MESSAGE
+            );
+            return;
+        }
+        
+        long price;
+        try {
+            price = Long.parseLong(priceText);
+        } catch (NumberFormatException e) {
+            javax.swing.JOptionPane.showMessageDialog(this,
+                "Harga harus berupa angka!",
+                "Validasi Gagal",
+                javax.swing.JOptionPane.WARNING_MESSAGE
+            );
+            return;
+        }
+        
+        // Buat objek Product
+        int categoryId = categoryList.get(selectedIndex - 1).getId();
+        Product product = new Product(
+            categoryId, name, description, price, isAvailable
+        );
+
+        boolean success = ProductRepository.save(product);
+
+        if (success) {
+            javax.swing.JOptionPane.showMessageDialog(this,
+                "Produk berhasil disimpan!",
+                "Sukses",
+                javax.swing.JOptionPane.INFORMATION_MESSAGE
+            );
+            clearForm();
+        } else {
+            javax.swing.JOptionPane.showMessageDialog(this,
+                "Gagal menyimpan produk. Coba lagi.",
+                "Error",
+                javax.swing.JOptionPane.ERROR_MESSAGE
+            );
+        }
+        
     }//GEN-LAST:event_submit_form_menuActionPerformed
 
     private void filed_menu_availableActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_filed_menu_availableActionPerformed
@@ -147,24 +232,25 @@ public class CreateMenu extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_to_menuActionPerformed
 
+    private void field_menu_categoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_field_menu_categoryActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_field_menu_categoryActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btn_upload_image;
+    private javax.swing.JComboBox<String> field_menu_category;
     private javax.swing.JCheckBox filed_menu_available;
-    private javax.swing.JComboBox<String> filed_menu_category;
+    private javax.swing.JTextArea filed_menu_description;
     private javax.swing.JTextField filed_menu_name;
     private javax.swing.JTextField filed_menu_price;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextArea jTextArea1;
     private javax.swing.JButton submit_form_menu;
     private javax.swing.JButton to_menu;
     // End of variables declaration//GEN-END:variables
