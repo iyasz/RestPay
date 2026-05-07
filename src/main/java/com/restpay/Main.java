@@ -34,11 +34,20 @@ public class Main extends javax.swing.JFrame implements Navigable {
         cardLayout = new CardLayout();
         ControlPanel.setLayout(cardLayout);
         
-        ControlPanel.add(new Dashboard(this), "DASHBOARD");
-        ControlPanel.add(new Cashier(this),   "CASHIER");
+        Dashboard dashboard = new Dashboard(this);
+        Cashier cashier     = new Cashier(this);
+        Menu menu           = new Menu(this);
+        CreateMenu createMenu = new CreateMenu(this);
         
-        ControlPanel.add(new Menu(this),      "MENU");
-        ControlPanel.add(new CreateMenu(this),   "CREATE_MENU");
+        dashboard.setName("DASHBOARD");   // ← tambah setName
+        menu.setName("MENU");
+        cashier.setName("CASHIER");
+        createMenu.setName("CREATE_MENU");
+        
+        ControlPanel.add(dashboard,   "DASHBOARD");
+        ControlPanel.add(cashier,     "CASHIER");
+        ControlPanel.add(menu,        "MENU");
+        ControlPanel.add(createMenu,  "CREATE_MENU");
         
         cardLayout.show(ControlPanel, "DASHBOARD");
         setActiveButton(to_dashboard);
@@ -46,6 +55,20 @@ public class Main extends javax.swing.JFrame implements Navigable {
     
     @Override
     public void navigateTo(String pageName) {
+        cardLayout.show(ControlPanel, pageName);
+    }
+    
+    @Override
+    public void navigateAndRefresh(String pageName) {
+        // Refresh panel tujuan sebelum ditampilkan
+        for (java.awt.Component comp : ControlPanel.getComponents()) {
+            if (comp instanceof Refreshable) {
+                String compName = comp.getName();
+                if (pageName.equals(compName)) {
+                    ((Refreshable) comp).refresh();
+                }
+            }
+        }
         cardLayout.show(ControlPanel, pageName);
     }
     

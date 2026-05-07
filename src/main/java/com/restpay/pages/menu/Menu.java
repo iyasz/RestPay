@@ -5,25 +5,73 @@
 package com.restpay.pages.menu;
 
 import com.restpay.Navigable;
+import com.restpay.Refreshable;
+import com.restpay.components.ProductCard;
+import com.restpay.models.Product;
+import com.restpay.repositories.ProductRepository;
+import com.restpay.utils.WrapLayout;
+import java.awt.Color;
+import java.util.List;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 /**
  *
  * @author iyasz
  */
-public class Menu extends javax.swing.JPanel {
+public class Menu extends javax.swing.JPanel implements Refreshable {
     
     private Navigable navigator;
-
+    private JPanel pnlGrid;
+    
     /**
      * Creates new form Menu
      */
     public Menu() {
         initComponents();
+        initGrid();
+        loadProducts();
     }
     
     public Menu(Navigable navigator) {
         initComponents();
         this.navigator = navigator;
+        initGrid();
+        loadProducts();
+    }
+    
+    private void initGrid() {
+        // Setup panel grid dengan WrapLayout
+        pnlGrid = new JPanel(new WrapLayout(WrapLayout.LEFT, 16, 16));
+        pnlGrid.setBackground(new Color(245, 245, 245));
+
+        // Masukkan ke scrollPane yang ada di designer
+        scrollPane.setViewportView(pnlGrid);
+        scrollPane.getVerticalScrollBar().setUnitIncrement(16);
+    }
+    
+    @Override
+    public void refresh() {
+        loadProducts(); // loadProducts tetap private, dipanggil dari sini ✅
+    }
+    
+    private void loadProducts() {
+        pnlGrid.removeAll();
+
+        List<Product> products = ProductRepository.getAll();
+
+        if (products.isEmpty()) {
+            JLabel lblEmpty = new JLabel("Belum ada produk");
+            lblEmpty.setForeground(new Color(150, 150, 150));
+            pnlGrid.add(lblEmpty);
+        } else {
+            for (Product product : products) {
+                pnlGrid.add(new ProductCard(product));
+            }
+        }
+
+        pnlGrid.revalidate();
+        pnlGrid.repaint();
     }
 
     /**
@@ -38,7 +86,7 @@ public class Menu extends javax.swing.JPanel {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         to_createMenu = new javax.swing.JButton();
-        jPanel1 = new javax.swing.JPanel();
+        scrollPane = new javax.swing.JScrollPane();
 
         setBackground(new java.awt.Color(255, 255, 255));
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -60,19 +108,7 @@ public class Menu extends javax.swing.JPanel {
         to_createMenu.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         to_createMenu.addActionListener(this::to_createMenuActionPerformed);
         add(to_createMenu, new org.netbeans.lib.awtextra.AbsoluteConstraints(860, 120, 160, 50));
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 960, Short.MAX_VALUE)
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 260, Short.MAX_VALUE)
-        );
-
-        add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 220, 960, 260));
+        add(scrollPane, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 240, 960, 380));
     }// </editor-fold>//GEN-END:initComponents
 
     private void to_createMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_to_createMenuActionPerformed
@@ -85,7 +121,7 @@ public class Menu extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane scrollPane;
     private javax.swing.JButton to_createMenu;
     // End of variables declaration//GEN-END:variables
 }

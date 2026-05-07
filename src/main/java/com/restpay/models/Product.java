@@ -16,12 +16,25 @@ public class Product {
     private long price;
     private boolean isAvailable;
     
-        public Product(int categoryId, String name, String description, long price, boolean isAvailable) {
+    private String categoryName;
+    
+    public Product(int categoryId, String name, String description, long price, boolean isAvailable) {
         this.categoryId  = categoryId;
         this.name        = name;
         this.description = description;
         this.price       = price;
         this.isAvailable = isAvailable;
+    }
+    
+    public Product(int id, int categoryId, String categoryName, String name,
+                   String description, long price, boolean isAvailable) {
+        this.id           = id;
+        this.categoryId   = categoryId;
+        this.categoryName = categoryName;
+        this.name         = name;
+        this.description  = description;
+        this.price        = price;
+        this.isAvailable  = isAvailable;
     }
     
     // Getters
@@ -30,5 +43,6 @@ public class Product {
     public String getDescription(){ return description; }
     public long getPrice()      { return price; }
     public boolean isAvailable()  { return isAvailable; }
+    public String getCategoryName() { return categoryName; }
     
 }

@@ -8,7 +8,6 @@ package com.restpay;
  *
  * @author iyasz
  */
-public interface Navigable {
-    void navigateTo(String pageName);
-    void navigateAndRefresh(String pageName);
+public interface Refreshable {
+    void refresh();
 }

@@ -24,7 +24,6 @@ public class CreateMenu extends javax.swing.JPanel {
     
     private Navigable navigator;
     private List<Category> categoryList = new ArrayList<>();
-    private String selectedImagePath = null;
     
     /**
      * Creates new form CreateMenu
@@ -212,6 +211,7 @@ public class CreateMenu extends javax.swing.JPanel {
                 javax.swing.JOptionPane.INFORMATION_MESSAGE
             );
             clearForm();
+            navigator.navigateAndRefresh("MENU");
         } else {
             javax.swing.JOptionPane.showMessageDialog(this,
                 "Gagal menyimpan produk. Coba lagi.",
@@ -228,7 +228,7 @@ public class CreateMenu extends javax.swing.JPanel {
 
     private void to_menuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_to_menuActionPerformed
         if (navigator != null) {
-            navigator.navigateTo("MENU");
+            navigator.navigateAndRefresh("MENU");
         }
     }//GEN-LAST:event_to_menuActionPerformed
 
