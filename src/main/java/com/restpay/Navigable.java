@@ -4,6 +4,8 @@
  */
 package com.restpay;
 
+import com.restpay.models.Product;
+
 /**
  *
  * @author iyasz
@@ -11,4 +13,5 @@ package com.restpay;
 public interface Navigable {
     void navigateTo(String pageName);
     void navigateAndRefresh(String pageName);
+    void navigateToEdit(Product product);
 }

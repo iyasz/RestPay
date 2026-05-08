@@ -37,17 +37,29 @@ public class Menu extends javax.swing.JPanel implements Refreshable {
         initComponents();
         this.navigator = navigator;
         initGrid();
-        loadProducts();
+
+        // ← Tunda sampai UI selesai render
+        javax.swing.SwingUtilities.invokeLater(() -> loadProducts());
     }
-    
+
     private void initGrid() {
-        // Setup panel grid dengan WrapLayout
         pnlGrid = new JPanel(new WrapLayout(WrapLayout.LEFT, 16, 16));
         pnlGrid.setBackground(new Color(245, 245, 245));
 
-        // Masukkan ke scrollPane yang ada di designer
         scrollPane.setViewportView(pnlGrid);
         scrollPane.getVerticalScrollBar().setUnitIncrement(16);
+
+        // ← Tambah listener ini    
+        // Dipanggil otomatis setiap kali ukuran scrollPane berubah
+        scrollPane.addComponentListener(new java.awt.event.ComponentAdapter() {
+            @Override
+            public void componentResized(java.awt.event.ComponentEvent e) {
+                // Paksa pnlGrid ikut lebar scrollPane
+                int width = scrollPane.getViewport().getWidth();
+                pnlGrid.setPreferredSize(null); // reset dulu
+                pnlGrid.revalidate();
+            }
+        });
     }
     
     @Override
@@ -66,7 +78,11 @@ public class Menu extends javax.swing.JPanel implements Refreshable {
             pnlGrid.add(lblEmpty);
         } else {
             for (Product product : products) {
-                pnlGrid.add(new ProductCard(product));
+                pnlGrid.add(new ProductCard(
+                    product,
+                    this::refresh,                          // onDeleted
+                    p -> navigator.navigateToEdit(p)        // onEdit ← tambah ini
+                ));
             }
         }
 
@@ -108,7 +124,7 @@ public class Menu extends javax.swing.JPanel implements Refreshable {
         to_createMenu.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         to_createMenu.addActionListener(this::to_createMenuActionPerformed);
         add(to_createMenu, new org.netbeans.lib.awtextra.AbsoluteConstraints(860, 120, 160, 50));
-        add(scrollPane, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 240, 960, 380));
+        add(scrollPane, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 240, 960, 410));
     }// </editor-fold>//GEN-END:initComponents
 
     private void to_createMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_to_createMenuActionPerformed

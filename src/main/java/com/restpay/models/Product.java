@@ -38,6 +38,7 @@ public class Product {
     }
     
     // Getters
+    public int getId()       { return id; }
     public int getCategoryId()    { return categoryId; }
     public String getName()       { return name; }
     public String getDescription(){ return description; }

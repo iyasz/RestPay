@@ -17,9 +17,9 @@ import java.util.List;
  * @author iyasz
  */
 
-    public class ProductRepository {
+public class ProductRepository {
 
-        public static List<Product> getAll() {
+    public static List<Product> getAll() {
         List<Product> products = new ArrayList<>();
 
         // JOIN ke categories untuk ambil nama kategori sekalian
@@ -79,4 +79,22 @@ import java.util.List;
         }
         
     }
+    
+    public static boolean delete(int id) {
+        // Soft delete — isi deleted_at, data tetap ada di database
+        String sql = "UPDATE products SET deleted_at = datetime('now', 'localtime') WHERE id = ?";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, id);
+            stmt.executeUpdate();
+            return true;
+
+        } catch (Exception e) {
+            System.err.println("Gagal hapus produk: " + e.getMessage());
+            return false;
+        }
+    }
+    
 }

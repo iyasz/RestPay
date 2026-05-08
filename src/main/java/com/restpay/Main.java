@@ -5,9 +5,11 @@
 package com.restpay;
 
 import com.restpay.database.DatabaseInitializer;
+import com.restpay.models.Product;
 import com.restpay.pages.Cashier;
 import com.restpay.pages.Dashboard;
 import com.restpay.pages.menu.CreateMenu;
+import com.restpay.pages.menu.EditMenu;
 import com.restpay.pages.menu.Menu;
 import java.awt.CardLayout;
 import java.awt.Color;
@@ -38,16 +40,19 @@ public class Main extends javax.swing.JFrame implements Navigable {
         Cashier cashier     = new Cashier(this);
         Menu menu           = new Menu(this);
         CreateMenu createMenu = new CreateMenu(this);
+        EditMenu editMenu = new EditMenu(this);
         
         dashboard.setName("DASHBOARD");   // ← tambah setName
         menu.setName("MENU");
         cashier.setName("CASHIER");
         createMenu.setName("CREATE_MENU");
+        editMenu.setName("EDIT_MENU");
         
         ControlPanel.add(dashboard,   "DASHBOARD");
         ControlPanel.add(cashier,     "CASHIER");
         ControlPanel.add(menu,        "MENU");
         ControlPanel.add(createMenu,  "CREATE_MENU");
+        ControlPanel.add(editMenu, "EDIT_MENU");
         
         cardLayout.show(ControlPanel, "DASHBOARD");
         setActiveButton(to_dashboard);
@@ -56,6 +61,18 @@ public class Main extends javax.swing.JFrame implements Navigable {
     @Override
     public void navigateTo(String pageName) {
         cardLayout.show(ControlPanel, pageName);
+    }
+    
+    @Override
+    public void navigateToEdit(Product product) {
+        // Cari EditMenu di ControlPanel, kirim data produknya
+        for (java.awt.Component comp : ControlPanel.getComponents()) {
+            if (comp instanceof EditMenu) {
+                ((EditMenu) comp).loadProduct(product); // ← isi form dengan data produk
+                break;
+            }
+        }
+        cardLayout.show(ControlPanel, "EDIT_MENU");
     }
     
     @Override
