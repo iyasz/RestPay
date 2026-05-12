@@ -80,6 +80,37 @@ public class ProductRepository {
         
     }
     
+    public static boolean update(Product product) {
+        String sql = """
+            UPDATE products
+            SET category_id  = ?,
+                name         = ?,
+                description  = ?,
+                price        = ?,
+                is_available = ?,
+                updated_at   = datetime('now', 'localtime')
+            WHERE id = ?
+        """;
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt   (1, product.getCategoryId());
+            stmt.setString(2, product.getName());
+            stmt.setString(3, product.getDescription());
+            stmt.setLong  (4, product.getPrice());
+            stmt.setInt   (5, product.isAvailable() ? 1 : 0);
+            stmt.setInt   (6, product.getId()); // ← WHERE id = ?
+
+            stmt.executeUpdate();
+            return true;
+
+        } catch (Exception e) {
+            System.err.println("Gagal update produk: " + e.getMessage());
+            return false;
+        }
+    }
+    
     public static boolean delete(int id) {
         // Soft delete — isi deleted_at, data tetap ada di database
         String sql = "UPDATE products SET deleted_at = datetime('now', 'localtime') WHERE id = ?";

@@ -223,15 +223,21 @@ public class EditMenu extends javax.swing.JPanel {
 
         // Buat objek Product
         int categoryId = categoryList.get(selectedIndex - 1).getId();
-        Product product = new Product(
-            categoryId, name, description, price, isAvailable
+        Product updatedProduct = new Product(
+            product.getId(), // ← pakai id dari produk yang sedang diedit
+            categoryId,
+            name,
+            description,
+            price,
+            isAvailable
         );
+        
 
-        boolean success = ProductRepository.save(product);
+        boolean success = ProductRepository.update(updatedProduct);
 
         if (success) {
             javax.swing.JOptionPane.showMessageDialog(this,
-                "Produk berhasil disimpan!",
+                "Produk berhasil diupdate!",
                 "Sukses",
                 javax.swing.JOptionPane.INFORMATION_MESSAGE
             );
@@ -239,7 +245,7 @@ public class EditMenu extends javax.swing.JPanel {
             navigator.navigateAndRefresh("MENU");
         } else {
             javax.swing.JOptionPane.showMessageDialog(this,
-                "Gagal menyimpan produk. Coba lagi.",
+                "Gagal mengubah produk. Coba lagi.",
                 "Error",
                 javax.swing.JOptionPane.ERROR_MESSAGE
             );

@@ -37,6 +37,17 @@ public class Product {
         this.isAvailable  = isAvailable;
     }
     
+    // Constructor untuk UPDATE (sudah ada id)
+    public Product(int id, int categoryId, String name, String description,
+                   long price, boolean isAvailable) {
+        this.id          = id;
+        this.categoryId  = categoryId;
+        this.name        = name;
+        this.description = description;
+        this.price       = price;
+        this.isAvailable = isAvailable;
+    }
+    
     // Getters
     public int getId()       { return id; }
     public int getCategoryId()    { return categoryId; }
