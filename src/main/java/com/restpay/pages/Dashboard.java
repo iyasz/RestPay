@@ -5,25 +5,105 @@
 package com.restpay.pages;
 
 import com.restpay.Navigable;
+import com.restpay.Refreshable;
+import com.restpay.components.SummaryCard;
+import com.restpay.models.Order;
+import com.restpay.repositories.DashboardRepository;
+import java.awt.*;
+import java.util.List;
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author iyasz
  */
-public class Dashboard extends javax.swing.JPanel {
+public class Dashboard extends javax.swing.JPanel implements Refreshable{
     
     private Navigable navigator;
+    private SummaryCard cardPendapatan;
+    private SummaryCard cardTransaksi;
+    private SummaryCard cardMenu;
+    private DefaultTableModel tableModel;
 
     /**
      * Creates new form Dashboard
      */
     public Dashboard() {
         initComponents();
+        initCards();
+        initTable();
+        javax.swing.SwingUtilities.invokeLater(() -> loadData());
     }
     
     public Dashboard(Navigable navigator) {
         initComponents();
         this.navigator = navigator;
+        initCards();
+        initTable();
+        javax.swing.SwingUtilities.invokeLater(() -> loadData());
+    }
+    
+    @Override
+    public void refresh() {
+        loadData();
+    }
+    
+    private void initCards() {
+        pnlCards.setLayout(new GridLayout(1, 3, 16, 0));
+        pnlCards.setBackground(new Color(245, 245, 245));
+
+        cardPendapatan = new SummaryCard("Pendapatan Hari Ini", "Rp 0",         new Color(102, 102, 255));
+        cardTransaksi  = new SummaryCard("Transaksi Hari Ini",  "0 transaksi",  new Color(0, 180, 120));
+        cardMenu       = new SummaryCard("Menu Tersedia",        "0 menu",       new Color(255, 160, 0));
+
+        pnlCards.add(cardPendapatan);
+        pnlCards.add(cardTransaksi);
+        pnlCards.add(cardMenu);
+    }
+    
+    private void initTable() {
+        // Kolom tabel
+        String[] columns = {"Invoice", "Customer", "Total", "Waktu"};
+        tableModel = new DefaultTableModel(columns, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false; // tabel tidak bisa diedit
+            }
+        };
+
+        JTable table = new JTable(tableModel);
+        table.setFont(new Font("Arial", Font.PLAIN, 13));
+        table.setRowHeight(35);
+        table.getTableHeader().setFont(new Font("Arial", Font.BOLD, 13));
+        table.getTableHeader().setBackground(new Color(245, 245, 245));
+        table.setShowVerticalLines(false);
+        table.setGridColor(new Color(230, 230, 230));
+
+        scrollOrders.setViewportView(table);
+    }
+
+    private void loadData() {
+        // Update summary cards
+        long pendapatan   = DashboardRepository.getPendapatanHariIni();
+        int transaksi     = DashboardRepository.getTransaksiHariIni();
+        int menuTersedia  = DashboardRepository.getTotalMenuTersedia();
+
+        cardPendapatan.setValue("Rp " + String.format("%,d", pendapatan));
+        cardTransaksi.setValue(transaksi + " transaksi");
+        cardMenu.setValue(menuTersedia + " menu");
+
+        // Update tabel transaksi terakhir
+        tableModel.setRowCount(0); // bersihkan dulu
+        List<Order> orders = DashboardRepository.getRecentOrders();
+        for (Order order : orders) {
+            tableModel.addRow(new Object[]{
+                order.getInvoiceNumber(),
+                order.getCustomerName(),
+                "Rp " + String.format("%,d", order.getTotal()),
+                order.getPaidAt()
+            });
+        }
     }
     
     /**
@@ -37,23 +117,44 @@ public class Dashboard extends javax.swing.JPanel {
 
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
+        pnlCards = new javax.swing.JPanel();
+        jLabel3 = new javax.swing.JLabel();
+        scrollOrders = new javax.swing.JScrollPane();
+        jLabel4 = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(255, 255, 255));
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
-        jLabel1.setText("Dashboard");
-        add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 50, -1, -1));
+        jLabel1.setText("Transaksi Terakhir");
+        add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 340, -1, -1));
 
         jLabel2.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(98, 98, 98));
-        jLabel2.setText("Ikhtisar performa dan statistik transaksi");
-        add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 90, -1, -1));
+        jLabel2.setText("Data transaksi terakhir dibuat");
+        add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 380, -1, -1));
+
+        pnlCards.setBackground(new java.awt.Color(254, 254, 254));
+        add(pnlCards, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 130, 900, 160));
+
+        jLabel3.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
+        jLabel3.setText("Dashboard");
+        add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 50, -1, -1));
+        add(scrollOrders, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 420, 900, 220));
+
+        jLabel4.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(98, 98, 98));
+        jLabel4.setText("Ikhtisar performa dan statistik transaksi");
+        add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 90, -1, -1));
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JPanel pnlCards;
+    private javax.swing.JScrollPane scrollOrders;
     // End of variables declaration//GEN-END:variables
 }

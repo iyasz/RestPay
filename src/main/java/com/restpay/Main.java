@@ -59,6 +59,17 @@ public class Main extends javax.swing.JFrame implements Navigable {
     }
     
     @Override
+    public void refreshPage(String pageName) {
+        // Cari panel berdasarkan nama, refresh tanpa pindah halaman
+        for (java.awt.Component comp : ControlPanel.getComponents()) {
+            if (comp instanceof Refreshable && pageName.equals(comp.getName())) {
+                ((Refreshable) comp).refresh();
+                break;
+            }
+        }
+    }
+    
+    @Override
     public void navigateTo(String pageName) {
         cardLayout.show(ControlPanel, pageName);
     }

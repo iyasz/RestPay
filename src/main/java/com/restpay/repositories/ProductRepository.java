@@ -18,6 +18,119 @@ import java.util.List;
  */
 
 public class ProductRepository {
+    
+    public static List<Product> getByCategory(int categoryId) {
+        List<Product> products = new ArrayList<>();
+
+        String sql = """
+            SELECT p.id, p.category_id, c.name as category_name,
+                   p.name, p.description, p.price, p.is_available
+            FROM products p
+            JOIN categories c ON p.category_id = c.id
+            WHERE p.deleted_at IS NULL AND p.category_id = ?
+            ORDER BY p.name ASC
+        """;
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, categoryId);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                products.add(new Product(
+                    rs.getInt("id"),
+                    rs.getInt("category_id"),
+                    rs.getString("category_name"),
+                    rs.getString("name"),
+                    rs.getString("description"),
+                    rs.getLong("price"),
+                    rs.getInt("is_available") == 1
+                ));
+            }
+
+        } catch (Exception e) {
+            System.err.println("Gagal ambil produk by kategori: " + e.getMessage());
+        }
+
+        return products;
+    }
+    
+    public static List<Product> getAvailableByCategory(int categoryId) {
+        List<Product> products = new ArrayList<>();
+
+        String sql = """
+            SELECT p.id, p.category_id, c.name as category_name,
+                   p.name, p.description, p.price, p.is_available
+            FROM products p
+            JOIN categories c ON p.category_id = c.id
+            WHERE p.deleted_at IS NULL
+            AND p.is_available = 1
+            AND p.category_id = ?
+            ORDER BY p.name ASC
+        """;
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, categoryId);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                products.add(new Product(
+                    rs.getInt("id"),
+                    rs.getInt("category_id"),
+                    rs.getString("category_name"),
+                    rs.getString("name"),
+                    rs.getString("description"),
+                    rs.getLong("price"),
+                    rs.getInt("is_available") == 1
+                ));
+            }
+
+        } catch (Exception e) {
+            System.err.println("Gagal ambil produk by kategori: " + e.getMessage());
+        }
+
+        return products;
+    }
+
+    
+    public static List<Product> getAvailable() {
+        List<Product> products = new ArrayList<>();
+
+        String sql = """
+            SELECT p.id, p.category_id, c.name as category_name,
+                   p.name, p.description, p.price, p.is_available
+            FROM products p
+            JOIN categories c ON p.category_id = c.id
+            WHERE p.deleted_at IS NULL
+            AND p.is_available = 1
+            ORDER BY p.name ASC
+        """;
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             Statement stmt  = conn.createStatement();
+             ResultSet rs    = stmt.executeQuery(sql)) {
+
+            while (rs.next()) {
+                products.add(new Product(
+                    rs.getInt("id"),
+                    rs.getInt("category_id"),
+                    rs.getString("category_name"),
+                    rs.getString("name"),
+                    rs.getString("description"),
+                    rs.getLong("price"),
+                    rs.getInt("is_available") == 1
+                ));
+            }
+
+        } catch (Exception e) {
+            System.err.println("Gagal ambil produk tersedia: " + e.getMessage());
+        }
+
+        return products;
+    }
 
     public static List<Product> getAll() {
         List<Product> products = new ArrayList<>();

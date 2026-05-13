@@ -14,4 +14,5 @@ public interface Navigable {
     void navigateTo(String pageName);
     void navigateAndRefresh(String pageName);
     void navigateToEdit(Product product);
+    void refreshPage(String pageName);
 }
